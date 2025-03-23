@@ -21,8 +21,17 @@ export const App: React.FC = () => {
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-    applyQuery(event.target.value);
+    const value = event.target.value;
+
+    setQuery(value);
+    if (value.trim() === '') {
+      setAppliedQuery('');
+      setSelectedPerson(null);
+
+      return;
+    }
+
+    applyQuery(value);
     setSelectedPerson(null);
   };
 
@@ -49,7 +58,9 @@ export const App: React.FC = () => {
           </h1>
         )}
 
-        <div className="dropdown is-active">
+        <div
+          className={classNames('dropdown', { 'is-active': dropdownIsShown })}
+        >
           <div className="dropdown-trigger">
             <input
               type="text"
@@ -91,7 +102,7 @@ export const App: React.FC = () => {
           )}
         </div>
 
-        {filteredPeople.length === 0 && (
+        {filteredPeople.length === 0 && query.trim() !== '' && (
           <div
             className="
                 notification
